@@ -1,0 +1,62 @@
+{
+  "temperatureCurrentC": 7,
+  "temperatureCurrentF": 45,
+  "dailyForecast": [
+    {
+      "date": "2023-10-31T00:00:00",
+      "temperatureMinC": 6,
+      "temperatureMinF": 44,
+      "temperatureMaxC": 12,
+      "temperatureMaxF": 54,
+      "summary": "Fog"
+    },
+    {
+      "date": "2023-11-01T00:00:00",
+      "temperatureMinC": 4,
+      "temperatureMinF": 39,
+      "temperatureMaxC": 13,
+      "temperatureMaxF": 56,
+      "summary": "Clear"
+    },
+    {
+      "date": "2023-11-02T00:00:00",
+      "temperatureMinC": 4,
+      "temperatureMinF": 40,
+      "temperatureMaxC": 19,
+      "temperatureMaxF": 67,
+      "summary": "Mainly clear"
+    },
+    {
+      "date": "2023-11-03T00:00:00",
+      "temperatureMinC": 13,
+      "temperatureMinF": 56,
+      "temperatureMaxC": 23,
+      "temperatureMaxF": 73,
+      "summary": "Overcast"
+    },
+    {
+      "date": "2023-11-04T00:00:00",
+      "temperatureMinC": 17,
+      "temperatureMinF": 64,
+      "temperatureMaxC": 26,
+      "temperatureMaxF": 79,
+      "summary": "Drizzle"
+    },
+    {
+      "date": "2023-11-05T00:00:00",
+      "temperatureMinC": 19,
+      "temperatureMinF": 67,
+      "temperatureMaxC": 27,
+      "temperatureMaxF": 81,
+      "summary": "Drizzle"
+    },
+    {
+      "date": "2023-11-06T00:00:00",
+      "temperatureMinC": 20,
+      "temperatureMinF": 68,
+      "temperatureMaxC": 31,
+      "temperatureMaxF": 87,
+      "summary": "Partly cloudy"
+    }
+  ]
+}

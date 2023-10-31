@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Utility.fs" />
+        <Compile Include="WeatherForecast.fs"/>
+        <Compile Include="Controllers/WeatherForecastController.fs"/>
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+</Project>
