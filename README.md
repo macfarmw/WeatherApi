@@ -180,7 +180,7 @@ member this.``GetAsync should return a list of weather forecasts``() =
 ```
 In this test we setup some expected data to be returned by the API call. `Create` here is a 
 simple static member on the `DailyForecast` record type to make this creation operation more 
-concise. Review the full code sample on GitHib if you'd like to see the details.  
+concise. Review the full code sample on github if you'd like to see the details.  
 
 The `mockWeatherForecastIO` instance is quite simple to setup. Since we're not trying to assert 
 anything about what the log functions are doing in this test, we just skip setting them up and 
