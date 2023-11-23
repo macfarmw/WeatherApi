@@ -185,7 +185,7 @@ concise. Review the full code sample on github if you'd like to see the details.
 The `mockWeatherForecastIO` instance is quite simple to setup. Since we're not trying to assert 
 anything about what the log functions are doing in this test, we just skip setting them up and 
 go with whatever the mocking library does as default. The hardest part of writing this test by 
-far was figuring out how to get at the value inside the `ObjectResult` type :-)
+far was figuring out how to get at the value inside the `ObjectResult` type.
 
 ```fsharp
 let objectValue = (result :?> ObjectResult).Value :?> WeatherForecast
