@@ -14,6 +14,7 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
+open WeatherApi.Controllers
 
 module Program =
     let exitCode = 0
@@ -22,19 +23,23 @@ module Program =
     let main args =
 
         let builder = WebApplication.CreateBuilder(args)
-
+        builder.Logging.AddConsole()
         builder.Services.AddControllers()
         builder.Services.AddHttpClient()
+        
         builder.Services.AddSingleton<IWeatherForecastIO>(fun sp -> 
             let httpClientFactory = sp.GetRequiredService<IHttpClientFactory>()
+            let logger = sp.GetRequiredService<ILogger<WeatherForecastController>>() 
             { new IWeatherForecastIO with
-                member _.CallWeatherServiceAsync = OpenMeteoWeatherService.getForecastAsync httpClientFactory }
+                member _.CallWeatherServiceAsync(latitude, longitude, token) =
+                    OpenMeteoWeatherService.getForecastAsync httpClientFactory latitude longitude token
+                member _.LogError(error, args) = logger.LogError(error, args)
+                member _.LogInformation(error, args) = logger.LogInformation(error, args) }
         )
 
         let app = builder.Build()
-
+        
         app.UseHttpsRedirection()
-
         app.UseAuthorization()
         app.MapControllers()
 

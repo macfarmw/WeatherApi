@@ -1,7 +1,6 @@
 namespace WeatherApi
 
 open System
-open System.ComponentModel.DataAnnotations
 open System.Net.Http
 open System.Text.Json
 open System.Text.RegularExpressions
@@ -15,6 +14,13 @@ New York: 40.741895,-73.989308
 Chicago:  41.8755616,-87.624421
 Houston:  29.7589382,-95.3676974
 *)
+
+type Location = string
+type Json = string
+type ErrorMessage = string
+type MessageTemplate = string
+type Latitude = float
+type Longitude = float
 
 // Forecast response model
 type DailyForecast =
@@ -42,22 +48,20 @@ type Coordinates =
       Longitude: float }
 
 module Coordinates =
-    let ofString (latlong:string) =
+    let ofString (location:string) : Coordinates option =
         let pattern = "(-{0,1}\d{1,3}\.\d{5,7}),(-{0,1}\d{1,3}\.\d{5,7})"
-        let mtch = Regex.Match(latlong, pattern)
+        let mtch = Regex.Match(location, pattern)
         if mtch.Success then
             Some { Latitude = float mtch.Groups.[1].Value
                    Longitude = float mtch.Groups.[2].Value }
         else
             None
-
-type Location = string
     
 // I/O operations interface
-type CallWeatherServiceAsync = Location -> CancellationToken -> Task<Result<WeatherForecast, string>>
-
 type IWeatherForecastIO =
-    abstract CallWeatherServiceAsync: CallWeatherServiceAsync
+    abstract CallWeatherServiceAsync: Latitude * Longitude * CancellationToken -> Task<Result<WeatherForecast, ErrorMessage>>
+    abstract LogError: MessageTemplate * obj array -> unit
+    abstract LogInformation: MessageTemplate * obj array -> unit
     
 // Concrete implementation using the open-meteo free weather API.    
 module OpenMeteoWeatherService =
@@ -140,29 +144,22 @@ module OpenMeteoWeatherService =
         { TemperatureCurrentC = int weatherData.Current.Temperature2m
           TemperatureCurrentF =  int (weatherData.Current.Temperature2m |> toFahrenheit)
           DailyForecast = dailyForecasts }
-
+        
     let getForecastAsync
         (httpClientFactory:IHttpClientFactory)  // Dependency
-        (location:Location)
+        (latitude: Latitude)
+        (longitude: Longitude)
         (ct:CancellationToken) : Task<Result<WeatherForecast, string>> =
         task{
             try
+                let coordinates = { Latitude = latitude; Longitude = longitude }
                 let httpClient = httpClientFactory.CreateClient()
-                
-                let coordinates = Coordinates.ofString location
-                
-                let url = Option.map createRequestUrl coordinates
-                
-                match url with
-                | Some u ->
-                    let! response = httpClient.GetAsync(u, ct)
-                    let! json = response.Content.ReadAsStringAsync()
-                    let weatherForecast = parseResponse json
-                    return Ok weatherForecast
-                | None ->
-                    return Error $"Error missing or invalid coordinates {location}"
-                    
+                let url = createRequestUrl coordinates
+                let! response = httpClient.GetAsync(url, ct)
+                let! json = response.Content.ReadAsStringAsync()
+                let weatherForecast = parseResponse json
+                return Ok weatherForecast
             with
             | ex ->
                 return Error $"Error calling the API: {ex.Message}"
-        }   
+        }

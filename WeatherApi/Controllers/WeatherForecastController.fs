@@ -3,24 +3,34 @@
 open System.Threading
 open System.Threading.Tasks
 open Microsoft.AspNetCore.Mvc
-open Microsoft.Extensions.Logging
 open WeatherApi
 
 [<ApiController>]
 [<Route("[controller]")>]
 type WeatherForecastController (io: IWeatherForecastIO) =
     inherit ControllerBase()
+    
+    let _io = io
 
     [<HttpGet>]
     member this.GetAsync(location:string) : Task<IActionResult> =
         task{
             let cts = new CancellationTokenSource(5000)
-            let! weatherForecastResult = io.CallWeatherServiceAsync location cts.Token
-            match weatherForecastResult with
+            
+            let coord = Coordinates.ofString location
+
+            let! weatherForecast =
+                match coord with
+                | Some { Latitude = lat; Longitude = long } ->
+                    _io.CallWeatherServiceAsync(lat, long, cts.Token)
+                | None ->
+                    Task.FromResult(Result.Error "Invalid location.")
+                        
+            match weatherForecast with
             | Ok res ->
+                _io.LogInformation("Successfully retrieved forecast for {location}", [| location |] ) |> ignore
                 return ObjectResult(res) :> IActionResult
             | Error err ->
+                _io.LogError("Error {error} retrieving forecast for {location}", [| err; location |] ) |> ignore
                 return this.BadRequest(err) :> IActionResult
         }
-        
-        
