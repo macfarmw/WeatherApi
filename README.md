@@ -1,4 +1,7 @@
 ﻿# Managing I/O in F# web API applications
+
+*Source code for this article is available on [github](https://github.com/macfarmw/WeatherApi/tree/main).*
+
 In this article, we'll consider a method for handling I/O operations in an F# application. There 
 are several methods available for separating I/O in F# apps. These range from using the built-in 
 dependency injection and interfaces to more abstract functional styles. We'll look at a simple
@@ -213,5 +216,10 @@ let mockWeatherForecastIOCustom =
         member _.LogError(error, args) = ()
         member _.LogInformation(error, args) = () }
 ```
+Then, simply inspect the value with an assertion.
 
-
+## Alternative approaches
+I found a lot of help and inspiration when looking into this topic from these articles.  
+- [Dealing with complex dependency injection in F#](https://www.bartoszsypytkowski.com/dealing-with-complex-dependency-injection-in-f/)
+- [Dependency Injection in F# Web APIs](https://dev.to/jhewlett/dependency-injection-in-f-web-apis-4h2o)
+- [Six approaches to dependency injection](https://fsharpforfunandprofit.com/posts/dependencies/)
