@@ -43,7 +43,7 @@ throughout may reduce any confusion.
 [How are F# interface members implemented with object expressions?](https://stackoverflow.com/questions/76690204/how-are-f-interface-members-implemented-with-object-expressions)
 
 ## Module functions to implement each I/O method
-While the interface member are written using an object oriented style, the functions that 
+While the interface members are written using an object oriented style, the functions that 
 implement each of these members can use a functional style and curried parameters. The implementing 
 function will be connected up to each of the members in the interface when we create the object 
 instances that implement the interface.
@@ -84,12 +84,12 @@ interface remains unchanged such infrastructure changes won't spill over beyond 
 > client for AWS queues define `SendMessageResponse` and `ReceiveMessageResponse` types. If these 
 > types are used at the interface level then all the consuming code downstream will have to take 
 > a reference on the AWS client. If 3rd party types remain isolated only with the module that 
-> interacts with that resource it can lead to much easier maintenance.
+> interacts within that resource it can lead to much easier maintenance.
 
 ## Using the DI container
-The standard DI container that comes with ASP.NET is suitable for most applications. In our 
-example above the finished implementation of `IWeatherForecastIO` is added to the container as a 
-singleton. So now it's simple to use this within the controller.
+The standard DI container that comes with ASP.NET is an easy default choice for many applications.
+In our example above the finished implementation of `IWeatherForecastIO` is added to the container
+as a singleton. So now it's simple to use this within the controller.
 
 ```fsharp
 [<ApiController>]

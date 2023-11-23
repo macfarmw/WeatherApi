@@ -28,9 +28,9 @@ type WeatherForecastController (io: IWeatherForecastIO) =
                         
             match weatherForecast with
             | Ok res ->
-                _io.LogInformation("Successfully retrieved forecast for {location}", [| location |] ) |> ignore
+                _io.LogInformation("Successfully retrieved forecast for {location}", [| location |] )
                 return ObjectResult(res) :> IActionResult
             | Error err ->
-                _io.LogError("Error {error} retrieving forecast for {location}", [| err; location |] ) |> ignore
+                _io.LogError("Error {error} retrieving forecast for {location}", [| err; location |] )
                 return this.BadRequest(err) :> IActionResult
         }
